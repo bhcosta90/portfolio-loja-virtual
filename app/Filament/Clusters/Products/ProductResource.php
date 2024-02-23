@@ -3,8 +3,6 @@
 namespace App\Filament\Clusters\Products;
 
 use App\Filament\Clusters\Products;
-use App\Filament\Resources\ProductResource\Pages;
-use App\Filament\Resources\ProductResource\RelationManagers;
 use App\Models\Product;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -85,7 +83,7 @@ class ProductResource extends Resource
                             Forms\Components\Checkbox::make('requires_shipping')
                                 ->label(__('This product will be shipped')),
                         ])
-                        ->columns()
+                        ->columns(),
                 ])->columnSpan(['lg' => 2]),
 
                 Forms\Components\Group::make([
@@ -112,8 +110,8 @@ class ProductResource extends Resource
                             Forms\Components\Select::make('categories')
                                 ->label(__('Categories'))
                                 ->relationship('categories', 'name')
-                                ->multiple()
-                        ])
+                                ->multiple(),
+                        ]),
                 ]),
             ])
             ->columns(3);
@@ -148,23 +146,23 @@ class ProductResource extends Resource
                     ->searchable()
                     ->sortable(),
 
-//                Tables\Columns\TextColumn::make('sku')
-//                    ->label('SKU')
-//                    ->searchable()
-//                    ->sortable()
-//                    ->toggleable(),
-//
-//                Tables\Columns\TextColumn::make('qty')
-//                    ->label('Quantity')
-//                    ->searchable()
-//                    ->sortable()
-//                    ->toggleable(),
-//
-//                Tables\Columns\TextColumn::make('security_stock')
-//                    ->searchable()
-//                    ->sortable()
-//                    ->toggleable()
-//                    ->toggledHiddenByDefault(),
+                //                Tables\Columns\TextColumn::make('sku')
+                //                    ->label('SKU')
+                //                    ->searchable()
+                //                    ->sortable()
+                //                    ->toggleable(),
+                //
+                //                Tables\Columns\TextColumn::make('qty')
+                //                    ->label('Quantity')
+                //                    ->searchable()
+                //                    ->sortable()
+                //                    ->toggleable(),
+                //
+                //                Tables\Columns\TextColumn::make('security_stock')
+                //                    ->searchable()
+                //                    ->sortable()
+                //                    ->toggleable()
+                //                    ->toggledHiddenByDefault(),
 
                 Tables\Columns\TextColumn::make('published_at')
                     ->label(__('Publish Date'))

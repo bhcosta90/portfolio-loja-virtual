@@ -3,8 +3,6 @@
 namespace App\Filament\Clusters\Products;
 
 use App\Filament\Clusters\Products;
-use App\Filament\Resources\CategoryResource\Pages;
-use App\Filament\Resources\CategoryResource\RelationManagers;
 use App\Models\Category;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -44,7 +42,7 @@ class CategoryResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')->label(__('Name'))->searchable()
+                Tables\Columns\TextColumn::make('name')->label(__('Name'))->searchable(),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),

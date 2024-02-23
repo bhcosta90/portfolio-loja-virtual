@@ -45,6 +45,17 @@ class ProductResource extends Resource
                             ->label(__('Description'))
                             ->columnSpanFull(),
                     ])->columns(2),
+                    Forms\Components\Section::make('Images')
+                        ->schema([
+                            Forms\Components\SpatieMediaLibraryFileUpload::make('media')
+                                ->collection('product-images')
+                                ->multiple()
+                                ->maxFiles(5)
+                                ->image()
+                                ->hiddenLabel(),
+                        ])
+                        ->collapsed()
+                        ->collapsible(),
                     Forms\Components\Section::make(__('Pricing'))
                         ->schema([
                             Forms\Components\TextInput::make('price_actual')

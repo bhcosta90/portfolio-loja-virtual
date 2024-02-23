@@ -22,9 +22,12 @@ class ProductResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-bolt';
 
-    protected static ?string $navigationLabel = 'Products';
-
     protected static ?int $navigationSort = 0;
+
+    public static function getLabel(): ?string
+    {
+        return __('product');
+    }
 
     public static function form(Form $form): Form
     {
@@ -57,7 +60,7 @@ class ProductResource extends Resource
                                 ->rules(['regex:/^\d{1,6}(\.\d{0,2})?$/']),
 
                             Forms\Components\TextInput::make('price_cost')
-                                ->label('Cost per item')
+                                ->label(__('Cost per item'))
                                 ->helperText(__('Customers won\'t see this price.'))
                                 ->numeric()
                                 ->rules(['regex:/^\d{1,6}(\.\d{0,2})?$/']),
@@ -79,7 +82,7 @@ class ProductResource extends Resource
                         ->schema([
                             Forms\Components\Toggle::make('is_visible')
                                 ->label(__('Visible'))
-                                ->helperText('This product will be hidden from all sales channels.')
+                                ->helperText(__('This product will be hidden from all sales channels.'))
                                 ->default(true),
 
                             Forms\Components\DatePicker::make('published_at')
@@ -96,6 +99,7 @@ class ProductResource extends Resource
                                 ->searchable(),
 
                             Forms\Components\Select::make('categories')
+                                ->label(__('Categories'))
                                 ->relationship('categories', 'name')
                                 ->multiple()
                         ])
@@ -109,22 +113,24 @@ class ProductResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
+                    ->label(__('Name'))
                     ->label('Name')
                     ->searchable()
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('brand.name')
+                    ->label(__('Brand'))
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
 
                 Tables\Columns\IconColumn::make('is_visible')
-                    ->label('Visibility')
+                    ->label(__('Visibility'))
                     ->sortable()
                     ->toggleable(),
 
                 Tables\Columns\TextColumn::make('price_actual')
-                    ->label('Price')
+                    ->label(__('Price'))
                     ->searchable()
                     ->sortable(),
 
@@ -147,7 +153,7 @@ class ProductResource extends Resource
 //                    ->toggledHiddenByDefault(),
 
                 Tables\Columns\TextColumn::make('published_at')
-                    ->label('Publish Date')
+                    ->label(__('Publish Date'))
                     ->date()
                     ->sortable()
                     ->toggleable()

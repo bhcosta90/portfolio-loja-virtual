@@ -3,6 +3,7 @@
 namespace App\Filament\Clusters;
 
 use Filament\Clusters\Cluster;
+use Illuminate\Contracts\Support\Htmlable;
 
 class Products extends Cluster
 {
@@ -13,5 +14,15 @@ class Products extends Cluster
     public static function getNavigationGroup(): ?string
     {
         return __('Shop');
+    }
+
+    public function getTitle(): string|Htmlable
+    {
+        return 'oi';
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return \ucfirst(__('product'));
     }
 }

@@ -22,6 +22,11 @@ class CategoryResource extends Resource
 
     protected static ?string $cluster = Products::class;
 
+    public static function getLabel(): ?string
+    {
+        return __('category');
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -39,7 +44,7 @@ class CategoryResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')->searchable()
+                Tables\Columns\TextColumn::make('name')->label(__('Name'))->searchable()
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),

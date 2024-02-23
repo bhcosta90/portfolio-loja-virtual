@@ -18,6 +18,11 @@ class BrandResource extends Resource
 
     protected static ?string $cluster = Products::class;
 
+    public static function getLabel(): ?string
+    {
+        return __('brand');
+    }
+
     protected static ?int $navigationSort = 1;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';

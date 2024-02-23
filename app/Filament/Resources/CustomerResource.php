@@ -10,12 +10,19 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Database\Eloquent\Model;
 
 class CustomerResource extends Resource
 {
     protected static ?string $model = Customer::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    public static function getLabel(): ?string
+    {
+        return __('customer');
+    }
 
     public static function getNavigationGroup(): ?string
     {
@@ -53,7 +60,7 @@ class CustomerResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            CustomerResource\AddressResource\RelationManagers\CustomersRelationManager::class,
         ];
     }
 

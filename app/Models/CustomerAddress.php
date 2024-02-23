@@ -5,19 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Customer extends Model
+class CustomerAddress extends Model
 {
     use SoftDeletes, HasFactory, HasUuids;
 
     protected $fillable = [
-        'email',
+        'zipcode',
+        'state',
+        'city',
+        'neighborhood',
+        'street',
+        'number',
+        'complement',
+        'country',
     ];
-
-    public function addresses(): HasMany
-    {
-        return $this->hasMany(CustomerAddress::class);
-    }
 }

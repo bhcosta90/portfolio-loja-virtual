@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Clusters\Products;
 
 use App\Filament\Clusters\Products;
 use App\Filament\Resources\CategoryResource\Pages;
@@ -11,12 +11,12 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class CategoryResource extends Resource
 {
     protected static ?string $model = Category::class;
+
+    protected static ?int $navigationSort = 2;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -42,7 +42,7 @@ class CategoryResource extends Resource
                 Tables\Columns\TextColumn::make('name')->searchable()
             ])
             ->filters([
-                //
+                Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -64,9 +64,9 @@ class CategoryResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListCategories::route('/'),
-            'create' => Pages\CreateCategory::route('/create'),
-            'edit' => Pages\EditCategory::route('/{record}/edit'),
+            'index' => Products\CategoryResource\Pages\ListCategories::route('/'),
+            'create' => Products\CategoryResource\Pages\CreateCategory::route('/create'),
+            'edit' => Products\CategoryResource\Pages\EditCategory::route('/{record}/edit'),
         ];
     }
 }

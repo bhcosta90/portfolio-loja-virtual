@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Clusters\Products;
 
 use App\Filament\Clusters\Products;
 use App\Filament\Resources\BrandResource\Pages;
@@ -11,14 +11,14 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class BrandResource extends Resource
 {
     protected static ?string $model = Brand::class;
 
     protected static ?string $cluster = Products::class;
+
+    protected static ?int $navigationSort = 1;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -42,7 +42,7 @@ class BrandResource extends Resource
                 Tables\Columns\TextColumn::make('name')->label(__('Name')),
             ])
             ->filters([
-                //
+                Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -64,9 +64,9 @@ class BrandResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListBrands::route('/'),
-            'create' => Pages\CreateBrand::route('/create'),
-            'edit' => Pages\EditBrand::route('/{record}/edit'),
+            'index' => Products\BrandResource\Pages\ListBrands::route('/'),
+            'create' => Products\BrandResource\Pages\CreateBrand::route('/create'),
+            'edit' => Products\BrandResource\Pages\EditBrand::route('/{record}/edit'),
         ];
     }
 }

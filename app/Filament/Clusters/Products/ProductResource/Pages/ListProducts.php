@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources\ProductResource\Pages;
+namespace App\Filament\Clusters\Products\ProductResource\Pages;
 
-use App\Filament\Resources\ProductResource;
+use App\Filament\Clusters\Products\ProductResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
@@ -15,5 +15,10 @@ class ListProducts extends ListRecords
         return [
             Actions\CreateAction::make(),
         ];
+    }
+
+    protected function getDefaultTableSortDirection(): ?string
+    {
+        return 'desc';
     }
 }

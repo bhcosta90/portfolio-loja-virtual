@@ -11,7 +11,7 @@ return new class extends Migration {
             $table->uuid('id')->primary();
             $table->foreignUuid('brand_id')->nullable();
             $table->string('name');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->boolean('is_visible')->default(false);
             $table->boolean('backorder')->default(false);
             $table->boolean('requires_shipping')->default(false);

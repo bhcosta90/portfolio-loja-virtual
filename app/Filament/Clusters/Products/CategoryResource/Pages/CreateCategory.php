@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Filament\Resources\CategoryResource\Pages;
+namespace App\Filament\Clusters\Products\CategoryResource\Pages;
 
-use App\Filament\Resources\CategoryResource;
-use Filament\Actions;
+use App\Filament\Clusters\Products\CategoryResource;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateCategory extends CreateRecord

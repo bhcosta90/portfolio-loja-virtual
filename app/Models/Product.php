@@ -24,6 +24,14 @@ class Product extends Model
         'price_cost',
     ];
 
+    protected $casts = [
+        'is_visible' => 'boolean',
+        'published_at' => 'datetime',
+        'price_actual' => 'integer',
+        'price_old' => 'integer',
+        'price_cost' => 'integer',
+    ];
+
     public function priceActual(): Attribute
     {
         return Attribute::make(

@@ -123,6 +123,9 @@ class ProductResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\SpatieMediaLibraryImageColumn::make('product-image')
+                    ->label('Image')
+                    ->collection('product-images'),
                 Tables\Columns\TextColumn::make('name')
                     ->label(__('Name'))
                     ->label('Name')

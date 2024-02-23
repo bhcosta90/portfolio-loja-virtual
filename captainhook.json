@@ -1,9 +1,9 @@
 {
     "pre-commit": {
-        "enabled": false,
+        "enabled": true,
         "actions": [
             {
-                "action": "vendor/bin/pest --parallel --processes=10"
+                "action": "./vendor/bin/pest --parallel --processes=10"
             }
         ]
     }

@@ -7,12 +7,18 @@ namespace Domain\ValueObject;
 use JsonException;
 
 use function compact;
+use function getenv;
+use function json_decode;
 use function json_encode;
+use function openssl_decrypt;
 
 class CreditCard
 {
-    public string $hash;
+    protected string $hash;
 
+    /**
+     * @throws JsonException
+     */
     public function __construct(
         protected string $name,
         protected string $number,
@@ -20,7 +26,7 @@ class CreditCard
         protected string $year,
         protected string $cvc,
     ) {
-        $this->encryptData(compact(
+        $this->encrypt(compact(
             $this->name,
             $this->number,
             $this->month,
@@ -29,16 +35,43 @@ class CreditCard
         ));
     }
 
+    public function getHash(): string
+    {
+        return $this->hash;
+    }
+
+
     /**
      * @throws JsonException
      */
-    protected function encryptData(array $data): string
+    protected function encrypt(array $data): string
     {
-        $key = 'your_secret_key'; // Use a secure key
+        $key = $this->getKey();
 
         $cipher = 'aes-256-cbc';
         $options = 0;
 
         return openssl_encrypt(json_encode($data, JSON_THROW_ON_ERROR), $cipher, $key, $options);
+    }
+
+    /**
+     * @throws JsonException
+     */
+    protected static function decrypt($encryptedData): array
+    {
+        $cipher = "aes-256-cbc";
+        $options = 0;
+
+        return json_decode(
+            openssl_decrypt($encryptedData, $cipher, self::getKey(), $options),
+            true,
+            512,
+            JSON_THROW_ON_ERROR
+        );
+    }
+
+    protected function getKey(): string
+    {
+        return getenv('CREDIT_CARD_KEY') ?: 'CREDIT_CARD_KEY';
     }
 }

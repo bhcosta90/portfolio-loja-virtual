@@ -14,7 +14,10 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 
 class Product extends Model implements HasMedia
 {
-    use HasFactory, HasUuids, InteractsWithMedia, SoftDeletes;
+    use HasFactory;
+    use HasUuids;
+    use InteractsWithMedia;
+    use SoftDeletes;
 
     protected $fillable = [
         'name',

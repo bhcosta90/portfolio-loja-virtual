@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Domain;
 
+use Domain\Exceptions\OrderNoItemException;
+
 use function array_column;
 use function array_map;
 
@@ -57,7 +59,7 @@ class Order
         if (count($this->products) === 0) {
             throw new OrderNoItemException();
         }
-        
+
         $this->payments[] = $payment;
     }
 }

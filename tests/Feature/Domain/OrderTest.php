@@ -1,8 +1,8 @@
 <?php
 
 use Domain\Enums\OrderPaymentTypeEnum;
+use Domain\Exceptions\OrderNoItemException;
 use Domain\Order;
-use Domain\OrderNoItemException;
 use Domain\OrderPayment;
 use Domain\OrderProduct;
 

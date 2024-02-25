@@ -1,6 +1,6 @@
 <?php
 
-use Domain\Enum\OrderPaymentTypeEnum;
+use Domain\Enums\OrderPaymentTypeEnum;
 use Domain\Order;
 use Domain\OrderNoItemException;
 use Domain\OrderPayment;
@@ -47,6 +47,10 @@ describe('OrderTest Feature Test', function () {
             shipping: 10,
         );
 
-        expect(fn() => $order->addPayment(new OrderPayment(type: OrderPaymentTypeEnum::BILLING, value: null, creditCard: null)))->toThrow(new OrderNoItemException());
+        expect(
+            fn() => $order->addPayment(
+                new OrderPayment(type: OrderPaymentTypeEnum::BILLING, value: null, creditCard: null)
+            )
+        )->toThrow(new OrderNoItemException());
     });
 });

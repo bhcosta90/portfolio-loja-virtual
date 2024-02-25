@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Domain\ValueObject;
+namespace Domain\ValueObjects;
 
 use JsonException;
 
@@ -26,20 +26,16 @@ class CreditCard
         protected string $year,
         protected string $cvc,
     ) {
-        $this->encrypt(compact(
-            $this->name,
-            $this->number,
-            $this->month,
-            $this->year,
-            $this->cvc
-        ));
+        $this->encrypt(
+            compact(
+                $this->name,
+                $this->number,
+                $this->month,
+                $this->year,
+                $this->cvc
+            )
+        );
     }
-
-    public function getHash(): string
-    {
-        return $this->hash;
-    }
-
 
     /**
      * @throws JsonException
@@ -52,6 +48,11 @@ class CreditCard
         $options = 0;
 
         return openssl_encrypt(json_encode($data, JSON_THROW_ON_ERROR), $cipher, $key, $options);
+    }
+
+    protected function getKey(): string
+    {
+        return getenv('CREDIT_CARD_KEY') ?: 'CREDIT_CARD_KEY';
     }
 
     /**
@@ -70,8 +71,8 @@ class CreditCard
         );
     }
 
-    protected function getKey(): string
+    public function getHash(): string
     {
-        return getenv('CREDIT_CARD_KEY') ?: 'CREDIT_CARD_KEY';
+        return $this->hash;
     }
 }

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Domain;
 
-use Domain\Enum\OrderPaymentTypeEnum;
-use Domain\ValueObject\CreditCard;
+use Domain\Enums\OrderPaymentTypeEnum;
+use Domain\ValueObjects\CreditCard;
 
 class OrderPayment
 {

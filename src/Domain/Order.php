@@ -54,9 +54,10 @@ class Order
      */
     public function addPayment(OrderPayment $payment): void
     {
-        if(count($this->products) === 0){
+        if (count($this->products) === 0) {
             throw new OrderNoItemException();
         }
+        
         $this->payments[] = $payment;
     }
 }

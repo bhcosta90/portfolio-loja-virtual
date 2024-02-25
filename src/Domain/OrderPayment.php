@@ -10,6 +10,7 @@ use Domain\ValueObject\CreditCard;
 class OrderPayment
 {
     protected ?bool $hasValue = null;
+
     public function __construct(
         protected OrderPaymentTypeEnum $type,
         protected ?int $value,

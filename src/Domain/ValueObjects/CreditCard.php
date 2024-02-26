@@ -86,13 +86,11 @@ class CreditCard
         $cipherMethod = 'aes-256-cbc';
         $options = 0;
 
-        // Extract the IV and encrypted data
         $data = base64_decode($encryptedData);
         $ivSize = openssl_cipher_iv_length($cipherMethod);
         $iv = substr($data, 0, $ivSize);
         $encryptedData = substr($data, $ivSize);
 
-        // Decrypt the data
         $decryptedData = openssl_decrypt($encryptedData, $cipherMethod, self::getKey(), $options, $iv);
         return json_decode($decryptedData, true, 512, JSON_THROW_ON_ERROR);
     }

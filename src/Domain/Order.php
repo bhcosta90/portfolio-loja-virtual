@@ -21,6 +21,7 @@ class Order
         protected string $customer,
         protected string $address,
         protected int $shipping,
+        public null|int|string $id = null,
     ) {
         //
     }
@@ -38,6 +39,11 @@ class Order
     public function getShipping(): int
     {
         return $this->shipping;
+    }
+
+    public function getId(): int|string|null
+    {
+        return $this->id;
     }
 
     public function addProduct(OrderProduct $product): void
@@ -62,7 +68,8 @@ class Order
      */
     public function getPayments(): array
     {
-        $paymentsWithValueNotNull = array_filter($this->payments, fn (OrderPayment $payment) => $payment->getHasValue());
+        $paymentsWithValueNotNull = array_filter($this->payments, fn (OrderPayment $payment) => $payment->getHasValue()
+        );
         $valueWithValueNotNull = array_sum(
             array_column(
                 array_map(fn (OrderPayment $payment) => ['total' => $payment->getValue()], $paymentsWithValueNotNull),

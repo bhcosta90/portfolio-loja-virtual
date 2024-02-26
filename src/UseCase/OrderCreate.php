@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace UseCase;
 
+use Contracts\DatabaseInterface;
+use Contracts\EventManagerInterface;
 use Domain\Enums\OrderPaymentTypeEnum;
+use Domain\Events\OrderCreateEvent;
 use Domain\Exceptions\OrderNoItemException;
 use Domain\Exceptions\OrderPaymentCreditCardNotFound;
 use Domain\Order;
@@ -21,8 +24,11 @@ class OrderCreate
     protected array $products = [];
     protected array $payments = [];
 
-    public function __construct(protected OrderRepositoryInterface $orderRepository)
-    {
+    public function __construct(
+        protected OrderRepositoryInterface $orderRepository,
+        protected DatabaseInterface $database,
+        protected EventManagerInterface $eventManager,
+    ) {
     }
 
     /**
@@ -39,9 +45,11 @@ class OrderCreate
         array_map(fn (OrderProduct $product) => $order->addProduct($product), $this->products);
         array_map(fn (OrderPayment $payment) => $order->addPayment($payment), $this->payments);
 
-        $orderDb = $this->orderRepository->create($order);
-
-        return DTO\OrderOutput::make($orderDb);
+        return $this->database->transaction(function () use ($order) {
+            $orderDb = $this->orderRepository->create($order);
+            $this->eventManager->dispatch(new OrderCreateEvent($orderDb));
+            return DTO\OrderOutput::make($orderDb);
+        });
     }
 
     public function addProduct(string $id, string $name, ?int $value, int $quantity): self

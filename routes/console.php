@@ -49,21 +49,21 @@ Artisan::command('play', function () {
         return $decryptedData;
     }
 
-// Example usage:
+    // Example usage:
 
     $key = 'your_secret_key_here'; // Replace with your actual secret key
 
-// Generate a random IV (Initialization Vector)
+    // Generate a random IV (Initialization Vector)
     $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
 
-// Data to be encrypted
+    // Data to be encrypted
     $dataToEncrypt = 'Hello, world!';
 
-// Encrypt the data
+    // Encrypt the data
     $encryptedData = encryptData($dataToEncrypt, $key, $iv);
     echo 'Encrypted Data: ' . $encryptedData . PHP_EOL;
 
-// Decrypt the data
+    // Decrypt the data
     $decryptedData = decryptData($encryptedData, $key);
     echo 'Decrypted Data: ' . $decryptedData . PHP_EOL;
 });

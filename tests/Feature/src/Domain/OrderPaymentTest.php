@@ -35,12 +35,12 @@ describe('OrderPaymentTest Feature Test', function () {
     });
 
     test("create a credit card payment and encrypt decrypt data", function () {
-        expect(fn() => new OrderPayment(
+        expect(fn () => new OrderPayment(
             type: OrderPaymentTypeEnum::CREDIT_CARD,
             value: 100,
             creditCard: null,
         ))->toThrow(new OrderPaymentCreditCardNotFound())
-            ->and(fn() => new OrderPayment(
+            ->and(fn () => new OrderPayment(
                 type: OrderPaymentTypeEnum::CREDIT_CARD,
                 value: 100,
                 creditCard: new CreditCard(

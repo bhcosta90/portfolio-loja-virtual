@@ -40,24 +40,24 @@ class Product extends Model implements HasMedia
     public function priceActual(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => $value / 100,
-            set: fn($value) => $value * 100,
+            get: fn ($value) => $value / 100,
+            set: fn ($value) => $value * 100,
         );
     }
 
     public function priceCost(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => $value / 100,
-            set: fn($value) => $value * 100,
+            get: fn ($value) => $value / 100,
+            set: fn ($value) => $value * 100,
         );
     }
 
     public function priceOld(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => $value / 100,
-            set: fn($value) => $value * 100,
+            get: fn ($value) => $value / 100,
+            set: fn ($value) => $value * 100,
         );
     }
 

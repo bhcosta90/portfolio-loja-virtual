@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Domain\ValueObjects;
 
+use Domain\ValueObjects\Exceptions\CreditCardException;
 use JsonException;
 
 use function base64_encode;
@@ -29,6 +30,10 @@ class CreditCard
         protected string $year,
         protected string $cvc,
     ) {
+        if ("{$month}{$year}" < date('mY')) {
+            throw new CreditCardException("The month and year cannot be smaller than the current month and year");
+        }
+
         $this->hash = $this->encrypt(
             compact(
                 'name',

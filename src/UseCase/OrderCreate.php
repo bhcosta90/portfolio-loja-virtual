@@ -19,6 +19,7 @@ use Domain\ValueObjects\Exceptions\CreditCardException;
 use UseCase\Exceptions\OrderCreateException;
 
 use function array_map;
+use function compact;
 
 class OrderCreate
 {
@@ -44,7 +45,17 @@ class OrderCreate
             shipping: $shipping
         );
 
-        array_map(fn (OrderProduct $product) => $order->addProduct($product), $this->products);
+        $productsPrice = $this->orderRepository->getByProducts(array_map(fn ($rs) => $rs['id'], $this->products));
+
+        array_map(fn ($product) => $order->addProduct(
+            new OrderProduct(
+                id: $product['id'],
+                name: $productsPrice[$product['id']]['name'],
+                value: $productsPrice[$product['id']]['price_actual'],
+                quantity: $product['quantity']
+            )
+        ), $this->products);
+
         array_map(fn (OrderPayment $payment) => $order->addPayment($payment), $this->payments);
 
         if (!count($this->products) || !count($this->payments)) {
@@ -58,9 +69,9 @@ class OrderCreate
         });
     }
 
-    public function addProduct(string $id, string $name, int $value, int $quantity): self
+    public function addProduct(string $id, int $quantity): self
     {
-        $this->products[] = new OrderProduct(id: $id, name: $name, value: $value, quantity: $quantity);
+        $this->products[] = compact('id', 'quantity');
         return $this;
     }
 

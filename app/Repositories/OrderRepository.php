@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace App\Repositories;
 
+use App\Models\Product;
 use Domain\Order;
 use Domain\Repository\OrderRepositoryInterface;
 
 class OrderRepository implements OrderRepositoryInterface
 {
-    public function __construct(protected \App\Models\Order $order)
+    public function __construct(protected \App\Models\Order $order, protected Product $product)
     {
     }
 
@@ -28,4 +29,11 @@ class OrderRepository implements OrderRepositoryInterface
             id: $orderDb->id
         );
     }
+
+    public function getByProducts(array $ids): array
+    {
+        return $this->product->whereIn('id', $ids)->get()->keyBy('id')->toArray();
+    }
+
+
 }

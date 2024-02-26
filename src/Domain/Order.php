@@ -21,7 +21,7 @@ class Order
         protected string $customer,
         protected string $address,
         protected int $shipping,
-        public null|int|string $id = null,
+        public readonly null|int|string $id = null,
     ) {
         //
     }

@@ -1,14 +1,18 @@
 <?php
 
 
+use App\Models\Product;
 use Domain\Exceptions\OrderNoItemException;
+use UseCase\DTO\OrderOutput;
 use UseCase\Exceptions\OrderCreateException;
 use UseCase\OrderCreate;
+
+use function PHPUnit\Framework\assertInstanceOf;
 
 describe('OrderCreate Feature Test', function () {
     beforeEach(fn () => $this->useCase = app(OrderCreate::class));
 
-    test("creating a order without products and payments", function () {
+    test("exception -> creating a order without products and payments", function () {
         expect(fn () => $this->useCase->execute(
             customer: 'customer',
             address: 'address',
@@ -16,7 +20,7 @@ describe('OrderCreate Feature Test', function () {
         ))->toThrow(new OrderCreateException("Products or payments not informed"));
     });
 
-    test("creating a order without products", function () {
+    test("exception -> creating a order without products", function () {
         expect(fn () => $this->useCase->addPayment(
             type: 'billing'
         )->execute(
@@ -26,16 +30,33 @@ describe('OrderCreate Feature Test', function () {
         ))->toThrow(new OrderNoItemException());
     });
 
-    test("creating a order without payments", function () {
+    test("exception -> creating a order without payments", function () {
+        $product = Product::factory()->create();
+
         expect(fn () => $this->useCase->addProduct(
-            id: 'testing',
-            name: 'name',
-            value: 10,
+            id: $product->id,
             quantity: 1
         )->execute(
             customer: 'customer',
             address: 'address',
             shipping: 100,
         ))->toThrow(new OrderCreateException("Products or payments not informed"));
+    });
+
+    test("creating a new order", function () {
+        $product = Product::factory()->create();
+
+        $response = $this->useCase->addProduct(
+            id: $product->id,
+            quantity: 1
+        )->addPayment(
+            type: 'billing'
+        )->execute(
+            customer: 'customer',
+            address: 'address',
+            shipping: 100,
+        );
+
+        assertInstanceOf(OrderOutput::class, $response);
     });
 });

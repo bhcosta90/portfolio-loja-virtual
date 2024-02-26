@@ -9,4 +9,6 @@ use Domain\Order;
 interface OrderRepositoryInterface
 {
     public function create(Order $order): Order;
+
+    public function getByProducts(array $ids): array;
 }

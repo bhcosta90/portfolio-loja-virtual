@@ -16,8 +16,9 @@ class ProductFactory extends Factory
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
             'name' => $this->faker->name(),
-            'price' => $this->faker->randomNumber(),
+            'price_actual' => $this->faker->randomNumber(),
             'description' => $this->faker->text(),
+            'published_at' => now(),
         ];
     }
 }

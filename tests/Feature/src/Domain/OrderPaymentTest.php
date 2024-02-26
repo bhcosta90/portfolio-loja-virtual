@@ -40,19 +40,20 @@ describe('OrderPaymentTest Feature Test', function () {
             type: OrderPaymentTypeEnum::CREDIT_CARD,
             value: 100,
             creditCard: null,
-        ))->toThrow(new OrderPaymentCreditCardNotFound());
-
-        expect(fn() => new OrderPayment(
-            type: OrderPaymentTypeEnum::CREDIT_CARD,
-            value: 100,
-            creditCard: new CreditCard(
-                name: 'testing',
-                number: '123456',
-                month: '01',
-                year: '2000',
-                cvc: '123'
-            ),
-        ))->toThrow(new CreditCardException("The month and year cannot be smaller than the current month and year"));
+        ))->toThrow(new OrderPaymentCreditCardNotFound())
+            ->and(fn() => new OrderPayment(
+                type: OrderPaymentTypeEnum::CREDIT_CARD,
+                value: 100,
+                creditCard: new CreditCard(
+                    name: 'testing',
+                    number: '123456',
+                    month: '01',
+                    year: '2000',
+                    cvc: '123'
+                ),
+            ))->toThrow(
+                new CreditCardException("The month and year cannot be smaller than the current month and year")
+            );
 
         $domain = new OrderPayment(
             type: OrderPaymentTypeEnum::CREDIT_CARD,

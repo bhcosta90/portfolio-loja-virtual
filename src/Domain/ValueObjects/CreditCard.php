@@ -21,7 +21,7 @@ class CreditCard
     protected string $hash;
 
     /**
-     * @throws JsonException
+     * @throws CreditCardException
      */
     public function __construct(
         protected string $name,

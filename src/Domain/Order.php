@@ -68,7 +68,9 @@ class Order
      */
     public function getPayments(): array
     {
-        $paymentsWithValueNotNull = array_filter($this->payments, fn (OrderPayment $payment) => $payment->getHasValue()
+        $paymentsWithValueNotNull = array_filter(
+            $this->payments,
+            fn (OrderPayment $payment) => $payment->getHasValue()
         );
         $valueWithValueNotNull = array_sum(
             array_column(

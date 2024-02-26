@@ -6,5 +6,5 @@ namespace Contracts;
 
 interface EventManagerInterface
 {
-    public function dispatch(EventInterface $event);
+    public function dispatch(EventInterface $event): void;
 }

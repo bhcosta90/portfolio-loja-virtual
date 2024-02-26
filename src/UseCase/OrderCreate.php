@@ -16,6 +16,7 @@ use Domain\OrderProduct;
 use Domain\Repository\OrderRepositoryInterface;
 use Domain\ValueObjects\CreditCard;
 use Domain\ValueObjects\Exceptions\CreditCardException;
+use UseCase\Exceptions\OrderCreateException;
 
 use function array_map;
 
@@ -33,6 +34,7 @@ class OrderCreate
 
     /**
      * @throws OrderNoItemException
+     * @throws OrderCreateException
      */
     public function execute(string $customer, string $address, int $shipping): DTO\OrderOutput
     {
@@ -45,6 +47,10 @@ class OrderCreate
         array_map(fn (OrderProduct $product) => $order->addProduct($product), $this->products);
         array_map(fn (OrderPayment $payment) => $order->addPayment($payment), $this->payments);
 
+        if (!count($this->products) || !count($this->payments)) {
+            throw new OrderCreateException("Products or payments not informed");
+        }
+
         return $this->database->transaction(function () use ($order) {
             $orderDb = $this->orderRepository->create($order);
             $this->eventManager->dispatch(new OrderCreateEvent($orderDb));
@@ -52,7 +58,7 @@ class OrderCreate
         });
     }
 
-    public function addProduct(string $id, string $name, ?int $value, int $quantity): self
+    public function addProduct(string $id, string $name, int $value, int $quantity): self
     {
         $this->products[] = new OrderProduct(id: $id, name: $name, value: $value, quantity: $quantity);
         return $this;
@@ -64,12 +70,12 @@ class OrderCreate
      */
     public function addPayment(
         string $type,
-        int $value,
-        string $creditCardName,
-        string $creditCardNumber,
-        string $creditCardMonth,
-        string $creditCardYear,
-        string $creditCardCvc
+        ?int $value = null,
+        ?string $creditCardName = null,
+        ?string $creditCardNumber = null,
+        ?string $creditCardMonth = null,
+        ?string $creditCardYear = null,
+        ?string $creditCardCvc = null
     ): self {
         $this->payments[] = new OrderPayment(
             type: OrderPaymentTypeEnum::from($type),

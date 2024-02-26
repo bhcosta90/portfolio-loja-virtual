@@ -45,17 +45,23 @@ class CreditCard
         );
     }
 
+    /**
+     * @throws JsonException
+     */
     protected function encrypt(array $data): string
     {
         $cipherMethod = 'aes-256-cbc';
         $options = 0;
 
         $iv = self::getIv();
-        $encryptedData = openssl_encrypt(json_encode($data), $cipherMethod, self::getKey(), $options, $iv);
+        $encryptedData = openssl_encrypt(json_encode($data, JSON_THROW_ON_ERROR), $cipherMethod, self::getKey(), $options, $iv);
 
         return base64_encode($iv . $encryptedData);
     }
 
+    /**
+     * @throws JsonException
+     */
     public static function decrypt(string $encryptedData): array
     {
         $cipherMethod = 'aes-256-cbc';
@@ -69,7 +75,7 @@ class CreditCard
 
         // Decrypt the data
         $decryptedData = openssl_decrypt($encryptedData, $cipherMethod, self::getKey(), $options, $iv);
-        return json_decode($decryptedData, true);
+        return json_decode($decryptedData, true, 512, JSON_THROW_ON_ERROR);
     }
 
     public function getHash(): string

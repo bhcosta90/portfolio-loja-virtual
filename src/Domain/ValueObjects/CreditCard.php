@@ -40,9 +40,6 @@ class CreditCard
         );
     }
 
-    /**
-     * @throws JsonException
-     */
     protected function encrypt(array $data): string
     {
         $cipherMethod = 'aes-256-cbc';
@@ -54,9 +51,6 @@ class CreditCard
         return base64_encode($iv . $encryptedData);
     }
 
-    /**
-     * @throws JsonException
-     */
     public static function decrypt(string $encryptedData): array
     {
         $cipherMethod = 'aes-256-cbc';

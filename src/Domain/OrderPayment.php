@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Domain;
 
 use Domain\Enums\OrderPaymentTypeEnum;
+use Domain\Exceptions\OrderValueChangeException;
 use Domain\ValueObjects\CreditCard;
 
 class OrderPayment
@@ -13,9 +14,10 @@ class OrderPayment
 
     public function __construct(
         protected OrderPaymentTypeEnum $type,
-        protected ?int $value,
-        protected ?CreditCard $creditCard,
-    ) {
+        protected ?int                 $value,
+        protected ?CreditCard          $creditCard,
+    )
+    {
         $this->hasValue = (bool)$this->value;
     }
 
@@ -37,5 +39,10 @@ class OrderPayment
     public function getHasValue(): ?bool
     {
         return $this->hasValue;
+    }
+
+    public function changeValue(int $value): void
+    {
+        $this->value = $value;
     }
 }

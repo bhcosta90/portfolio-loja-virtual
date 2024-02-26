@@ -20,8 +20,9 @@ class Order
     public function __construct(
         protected string $customer,
         protected string $address,
-        protected int $shipping,
-    ) {
+        protected int    $shipping,
+    )
+    {
         //
     }
 
@@ -61,5 +62,26 @@ class Order
         }
 
         $this->payments[] = $payment;
+    }
+
+    public function getPayments(): array
+    {
+        $paymentsWithValueNotNull = array_filter($this->payments, fn(OrderPayment $payment) => $payment->getHasValue());
+        $valueWithValueNotNull = array_sum(array_column(array_map(fn(OrderPayment $payment) => ['total' => $payment->getValue()], $paymentsWithValueNotNull), 'total'));
+        $total = ($totalProducts = $this->getTotal()) - $valueWithValueNotNull;
+
+        $paymentsWithValueNull = array_filter($this->payments, fn(OrderPayment $payment) => !$payment->getHasValue());
+
+        $total /= count($paymentsWithValueNull);
+
+        array_map(fn(OrderPayment $payment) => $payment->changeValue((int) $total), $paymentsWithValueNull);
+
+        $totalCalculate = array_sum(array_column(array_map(fn(OrderPayment $payment) => ['total' => $payment->getValue()], $this->payments), 'total'));
+
+        if($totalCalculate < $totalProducts) {
+            $this->payments[0]->changeValue($this->payments[0]->getValue() + ($totalProducts - $totalCalculate));
+        }
+
+        return $this->payments;
     }
 }

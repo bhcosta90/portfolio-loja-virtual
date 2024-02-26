@@ -57,6 +57,9 @@ class Order
         $this->payments[] = $payment;
     }
 
+    /**
+     * @return OrderPayment[]
+     */
     public function getPayments(): array
     {
         $paymentsWithValueNotNull = array_filter($this->payments, fn(OrderPayment $payment) => $payment->getHasValue());

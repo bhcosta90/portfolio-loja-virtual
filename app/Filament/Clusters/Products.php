@@ -16,13 +16,13 @@ class Products extends Cluster
         return __('Shop');
     }
 
-    public function getTitle(): string|Htmlable
-    {
-        return 'oi';
-    }
-
     public static function getNavigationLabel(): string
     {
         return \ucfirst(__('product'));
+    }
+
+    public function getTitle(): string|Htmlable
+    {
+        return 'oi';
     }
 }

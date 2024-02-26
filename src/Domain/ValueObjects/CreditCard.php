@@ -54,9 +54,28 @@ class CreditCard
         $options = 0;
 
         $iv = self::getIv();
-        $encryptedData = openssl_encrypt(json_encode($data, JSON_THROW_ON_ERROR), $cipherMethod, self::getKey(), $options, $iv);
+        $encryptedData = openssl_encrypt(
+            json_encode($data, JSON_THROW_ON_ERROR),
+            $cipherMethod,
+            self::getKey(),
+            $options,
+            $iv
+        );
 
         return base64_encode($iv . $encryptedData);
+    }
+
+    /**
+     * @return string
+     */
+    protected static function getIv(): string
+    {
+        return openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
+    }
+
+    protected static function getKey(): string
+    {
+        return getenv('CREDIT_CARD_KEY') ?: 'CREDIT_CARD_KEY';
     }
 
     /**
@@ -81,18 +100,5 @@ class CreditCard
     public function getHash(): string
     {
         return $this->hash;
-    }
-
-    protected static function getKey(): string
-    {
-        return getenv('CREDIT_CARD_KEY') ?: 'CREDIT_CARD_KEY';
-    }
-
-    /**
-     * @return string
-     */
-    protected static function getIv(): string
-    {
-        return openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
     }
 }

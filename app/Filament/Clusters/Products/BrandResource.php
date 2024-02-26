@@ -15,15 +15,13 @@ class BrandResource extends Resource
     protected static ?string $model = Brand::class;
 
     protected static ?string $cluster = Products::class;
+    protected static ?int $navigationSort = 1;
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function getLabel(): ?string
     {
         return __('brand');
     }
-
-    protected static ?int $navigationSort = 1;
-
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {

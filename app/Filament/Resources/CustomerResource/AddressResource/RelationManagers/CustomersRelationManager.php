@@ -15,6 +15,16 @@ class CustomersRelationManager extends RelationManager
 {
     protected static string $relationship = 'addresses';
 
+    public static function getTitle(Model $ownerRecord, string $pageClass): string
+    {
+        return __('Address');
+    }
+
+    protected static function getRecordLabel(): ?string
+    {
+        return __('address');
+    }
+
     public function form(Form $form): Form
     {
         return $form
@@ -97,11 +107,6 @@ class CustomersRelationManager extends RelationManager
             ]);
     }
 
-    protected function canCreate(): bool
-    {
-        return true;
-    }
-
     public function infolist(Infolist $infolist): Infolist
     {
         return $infolist
@@ -116,13 +121,8 @@ class CustomersRelationManager extends RelationManager
             ->inlineLabel();
     }
 
-    protected static function getRecordLabel(): ?string
+    protected function canCreate(): bool
     {
-        return __('address');
-    }
-
-    public static function getTitle(Model $ownerRecord, string $pageClass): string
-    {
-        return __('Address');
+        return true;
     }
 }

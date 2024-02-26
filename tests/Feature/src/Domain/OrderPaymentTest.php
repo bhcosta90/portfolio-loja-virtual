@@ -5,7 +5,6 @@ use Domain\Enums\OrderPaymentTypeEnum;
 use Domain\Exceptions\OrderPaymentCreditCardNotFound;
 use Domain\OrderPayment;
 use Domain\ValueObjects\CreditCard;
-
 use Domain\ValueObjects\Exceptions\CreditCardException;
 
 use function PHPUnit\Framework\assertEquals;

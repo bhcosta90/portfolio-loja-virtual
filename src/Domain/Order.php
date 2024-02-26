@@ -21,8 +21,7 @@ class Order
         protected string $customer,
         protected string $address,
         protected int    $shipping,
-    )
-    {
+    ) {
         //
     }
 
@@ -43,7 +42,7 @@ class Order
 
     public function getTotal(): int
     {
-        $serializeProduct = array_map(fn(OrderProduct $product) => ['price' => $product->getTotal()], $this->products);
+        $serializeProduct = array_map(fn (OrderProduct $product) => ['price' => $product->getTotal()], $this->products);
         return array_sum(array_column($serializeProduct, 'price')) + $this->shipping;
     }
 
@@ -66,17 +65,17 @@ class Order
 
     public function getPayments(): array
     {
-        $paymentsWithValueNotNull = array_filter($this->payments, fn(OrderPayment $payment) => $payment->getHasValue());
-        $valueWithValueNotNull = array_sum(array_column(array_map(fn(OrderPayment $payment) => ['total' => $payment->getValue()], $paymentsWithValueNotNull), 'total'));
+        $paymentsWithValueNotNull = array_filter($this->payments, fn (OrderPayment $payment) => $payment->getHasValue());
+        $valueWithValueNotNull = array_sum(array_column(array_map(fn (OrderPayment $payment) => ['total' => $payment->getValue()], $paymentsWithValueNotNull), 'total'));
         $total = ($totalProducts = $this->getTotal()) - $valueWithValueNotNull;
 
-        $paymentsWithValueNull = array_filter($this->payments, fn(OrderPayment $payment) => !$payment->getHasValue());
+        $paymentsWithValueNull = array_filter($this->payments, fn (OrderPayment $payment) => !$payment->getHasValue());
 
         $total /= count($paymentsWithValueNull);
 
-        array_map(fn(OrderPayment $payment) => $payment->changeValue((int) $total), $paymentsWithValueNull);
+        array_map(fn (OrderPayment $payment) => $payment->changeValue((int) $total), $paymentsWithValueNull);
 
-        $totalCalculate = array_sum(array_column(array_map(fn(OrderPayment $payment) => ['total' => $payment->getValue()], $this->payments), 'total'));
+        $totalCalculate = array_sum(array_column(array_map(fn (OrderPayment $payment) => ['total' => $payment->getValue()], $this->payments), 'total'));
 
         if($totalCalculate < $totalProducts) {
             $this->payments[0]->changeValue($this->payments[0]->getValue() + ($totalProducts - $totalCalculate));

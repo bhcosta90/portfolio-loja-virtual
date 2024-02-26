@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Domain;
 
 use Domain\Enums\OrderPaymentTypeEnum;
-use Domain\Exceptions\OrderValueChangeException;
+use Domain\Exceptions\OrderPaymentCreditCardNotFound;
 use Domain\ValueObjects\CreditCard;
+
+use function is_null;
 
 class OrderPayment
 {
@@ -14,11 +16,14 @@ class OrderPayment
 
     public function __construct(
         protected OrderPaymentTypeEnum $type,
-        protected ?int                 $value,
-        protected ?CreditCard          $creditCard,
-    )
-    {
+        protected ?int $value,
+        protected ?CreditCard $creditCard,
+    ) {
         $this->hasValue = (bool)$this->value;
+
+        if ($this->type === OrderPaymentTypeEnum::CREDIT_CARD && is_null($this->creditCard)) {
+            throw new OrderPaymentCreditCardNotFound();
+        }
     }
 
     public function getType(): OrderPaymentTypeEnum

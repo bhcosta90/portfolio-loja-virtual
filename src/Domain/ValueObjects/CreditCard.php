@@ -6,11 +6,14 @@ namespace Domain\ValueObjects;
 
 use JsonException;
 
+use function base64_encode;
 use function compact;
 use function getenv;
 use function json_decode;
 use function json_encode;
+use function openssl_cipher_iv_length;
 use function openssl_decrypt;
+use function openssl_random_pseudo_bytes;
 
 class CreditCard
 {
@@ -26,13 +29,13 @@ class CreditCard
         protected string $year,
         protected string $cvc,
     ) {
-        $this->encrypt(
+        $this->hash = $this->encrypt(
             compact(
-                $this->name,
-                $this->number,
-                $this->month,
-                $this->year,
-                $this->cvc
+                'name',
+                'number',
+                'month',
+                'year',
+                'cvc'
             )
         );
     }
@@ -42,37 +45,49 @@ class CreditCard
      */
     protected function encrypt(array $data): string
     {
-        $key = $this->getKey();
-
-        $cipher = 'aes-256-cbc';
+        $cipherMethod = 'aes-256-cbc';
         $options = 0;
 
-        return openssl_encrypt(json_encode($data, JSON_THROW_ON_ERROR), $cipher, $key, $options);
-    }
+        $iv = self::getIv();
+        $encryptedData = openssl_encrypt(json_encode($data), $cipherMethod, self::getKey(), $options, $iv);
 
-    protected function getKey(): string
-    {
-        return getenv('CREDIT_CARD_KEY') ?: 'CREDIT_CARD_KEY';
+        return base64_encode($iv . $encryptedData);
     }
 
     /**
      * @throws JsonException
      */
-    protected static function decrypt($encryptedData): array
+    public static function decrypt(string $encryptedData): array
     {
-        $cipher = "aes-256-cbc";
+        $cipherMethod = 'aes-256-cbc';
         $options = 0;
 
-        return json_decode(
-            openssl_decrypt($encryptedData, $cipher, self::getKey(), $options),
-            true,
-            512,
-            JSON_THROW_ON_ERROR
-        );
+        // Extract the IV and encrypted data
+        $data = base64_decode($encryptedData);
+        $ivSize = openssl_cipher_iv_length($cipherMethod);
+        $iv = substr($data, 0, $ivSize);
+        $encryptedData = substr($data, $ivSize);
+
+        // Decrypt the data
+        $decryptedData = openssl_decrypt($encryptedData, $cipherMethod, self::getKey(), $options, $iv);
+        return json_decode($decryptedData, true);
     }
 
     public function getHash(): string
     {
         return $this->hash;
+    }
+
+    protected static function getKey(): string
+    {
+        return getenv('CREDIT_CARD_KEY') ?: 'CREDIT_CARD_KEY';
+    }
+
+    /**
+     * @return string
+     */
+    protected static function getIv(): string
+    {
+        return openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
     }
 }

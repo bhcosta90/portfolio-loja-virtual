@@ -5,6 +5,7 @@ use Domain\Exceptions\OrderNoItemException;
 use Domain\Order;
 use Domain\OrderPayment;
 use Domain\OrderProduct;
+
 use function PHPUnit\Framework\assertEquals;
 
 describe('OrderTest Feature Test', function () {
@@ -49,7 +50,7 @@ describe('OrderTest Feature Test', function () {
         );
 
         expect(
-            fn() => $order->addPayment(
+            fn () => $order->addPayment(
                 new OrderPayment(type: OrderPaymentTypeEnum::BILLING, value: null, creditCard: null)
             )
         )->toThrow(new OrderNoItemException());

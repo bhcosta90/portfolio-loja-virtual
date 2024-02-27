@@ -2,7 +2,9 @@
 
 
 use App\Models\Product;
+use Domain\Events\OrderCreateEvent;
 use Domain\Exceptions\OrderNoItemException;
+use Illuminate\Support\Facades\Event;
 use UseCase\DTO\OrderOutput;
 use UseCase\Exceptions\OrderCreateException;
 use UseCase\OrderCreate;
@@ -44,6 +46,8 @@ describe('OrderCreate Feature Test', function () {
     });
 
     test("creating a new order", function () {
+        Event::fake();
+
         $product = Product::factory()->create();
 
         $response = $this->useCase->addProduct(
@@ -58,5 +62,9 @@ describe('OrderCreate Feature Test', function () {
         );
 
         assertInstanceOf(OrderOutput::class, $response);
+
+        Event::assertDispatched(OrderCreateEvent::class, function ($event) use ($response) {
+            return ['id' => $response->id] === $event->payload();
+        });
     });
 });

@@ -13,6 +13,11 @@
 {{-- MAIN --}}
 <x-main>
     <x-slot:content>
+        <x-drawer id="my-drawer" title="Hello" class="bg-blue-50" right with-close-button separator>
+            oi
+        </x-drawer>
+        <label for="my-drawer" class="btn btn-primary">Open left</label>
+
         {{ $slot }}
     </x-slot:content>
 </x-main>

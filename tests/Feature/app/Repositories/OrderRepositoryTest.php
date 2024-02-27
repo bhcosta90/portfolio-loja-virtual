@@ -10,9 +10,12 @@ use Domain\Enums\OrderPaymentTypeEnum;
 use Domain\Order;
 use Domain\OrderPayment;
 use Domain\OrderProduct;
+use Domain\ValueObjects\CreditCard;
 
 use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\assertDatabaseHas;
+use function PHPUnit\Framework\assertEquals;
+use function PHPUnit\Framework\assertNotEmpty;
 
 describe('OrderRepository Feature Test', function () {
     test("should be able create an order with all relationship", function () {
@@ -35,9 +38,15 @@ describe('OrderRepository Feature Test', function () {
 
         $order->addPayment(
             new OrderPayment(
-                type: OrderPaymentTypeEnum::BILLING,
+                type: OrderPaymentTypeEnum::CREDIT_CARD,
                 value: null,
-                creditCard: null
+                creditCard: new CreditCard(
+                    name: 'testing-name',
+                    number: 'testing-number',
+                    month: date('m'),
+                    year: date('Y'),
+                    cvc: 'cvc',
+                )
             )
         );
 
@@ -59,8 +68,18 @@ describe('OrderRepository Feature Test', function () {
         assertDatabaseHas(ModelOrderPayment::class, [
             'order_id' => $response->id,
             'value' => $shipping + ($product->price_actual * 1),
-            'type' => 'billing',
-            'credit_card' => null,
+            'type' => 'credit-card',
         ]);
+
+        assertNotEmpty(ModelOrderPayment::first()->credit_card);
+
+        assertEquals([
+            'name' => 'testing-name',
+            'number' => 'testing-number',
+            'month' => '02',
+            'year' => '2024',
+            'cvc' => 'cvc',
+
+        ], CreditCard::decrypt(ModelOrderPayment::first()->credit_card));
     });
 });

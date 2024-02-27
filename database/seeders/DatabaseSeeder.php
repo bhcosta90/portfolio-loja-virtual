@@ -13,13 +13,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
-
         if (!User::whereEmail('test@example.com')->count()) {
             User::factory()->create([
                 'name' => 'Test User',
                 'email' => 'test@example.com',
             ]);
         }
+
+        $this->call(CategorySeeder::class);
+        $this->call(ProductSeeder::class);
+        $this->call(CategoryProductSeeder::class);
     }
 }

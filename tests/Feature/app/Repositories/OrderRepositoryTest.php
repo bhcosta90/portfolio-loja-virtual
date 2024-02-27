@@ -43,6 +43,7 @@ describe('OrderRepository Feature Test', function () {
 
         $repository = new OrderRepository(new ModelOrder(), new Product());
         $response = $repository->create($order);
+        
         assertDatabaseCount(ModelOrder::class, 1);
         assertDatabaseCount(ModelOrderProduct::class, 1);
         assertDatabaseCount(ModelOrderPayment::class, 1);

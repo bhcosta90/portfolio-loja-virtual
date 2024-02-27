@@ -79,7 +79,6 @@ describe('OrderRepository Feature Test', function () {
             'month' => '02',
             'year' => '2024',
             'cvc' => 'cvc',
-
         ], CreditCard::decrypt(ModelOrderPayment::first()->credit_card));
     });
 });

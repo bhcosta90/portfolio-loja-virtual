@@ -49,6 +49,7 @@ describe('OrderRepository Feature Test', function () {
         assertDatabaseCount(ModelOrderPayment::class, 1);
 
         assertDatabaseHas(ModelOrderProduct::class, [
+            'order_id' => $response->id,
             'product_id' => $product->id,
             'value' => $product->price_actual,
             'quantity' => 1,
@@ -56,9 +57,9 @@ describe('OrderRepository Feature Test', function () {
         ]);
 
         assertDatabaseHas(ModelOrderPayment::class, [
+            'order_id' => $response->id,
             'value' => $shipping + ($product->price_actual * 1),
             'type' => 'billing',
-            'order_id' => $response->id,
             'credit_card' => null,
         ]);
     });

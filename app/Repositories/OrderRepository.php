@@ -6,7 +6,11 @@ namespace App\Repositories;
 
 use App\Models\Product;
 use Domain\Order;
+use Domain\OrderPayment;
+use Domain\OrderProduct;
 use Domain\Repository\OrderRepositoryInterface;
+
+use function array_map;
 
 class OrderRepository implements OrderRepositoryInterface
 {
@@ -21,6 +25,19 @@ class OrderRepository implements OrderRepositoryInterface
             'address_id' => $order->getAddress(),
             'shipping' => $order->getShipping(),
         ]);
+
+        array_map(fn (OrderProduct $orderProduct) => $orderDb->products()->create([
+            'product_id' => $orderProduct->getId(),
+            'name' => $orderProduct->getName(),
+            'value' => $orderProduct->getValue(),
+            'quantity' => $orderProduct->getQuantity(),
+        ]), $order->getProducts());
+
+        array_map(fn (OrderPayment $orderPayment) => $orderDb->payments()->create([
+            'value' => $orderPayment->getValue(),
+            'type' => $orderPayment->getType(),
+            'credit_card' => $orderPayment->getCreditCard(),
+        ]), $order->getPayments());
 
         return new Order(
             customer: $orderDb->customer_id,

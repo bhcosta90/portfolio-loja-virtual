@@ -51,6 +51,11 @@ class Order
         $this->products[] = $product;
     }
 
+    public function getProducts(): array
+    {
+        return $this->products;
+    }
+
     /**
      * @throws OrderNoItemException
      */

@@ -4,7 +4,7 @@
 use App\Models\Order as ModelOrder;
 use App\Models\OrderPayment as ModelOrderPayment;
 use App\Models\OrderProduct as ModelOrderProduct;
-use App\Models\Product;
+use App\Models\Product as ModelProduct;
 use App\Repositories\OrderRepository;
 use Domain\Enums\OrderPaymentTypeEnum;
 use Domain\Order;
@@ -16,7 +16,7 @@ use function Pest\Laravel\assertDatabaseHas;
 
 describe('OrderRepository Feature Test', function () {
     test("should be able create an order with all relationship", function () {
-        $product = Product::factory()->create();
+        $product = ModelProduct::factory()->create();
 
         $order = new Order(
             customer: 'testing',
@@ -41,9 +41,9 @@ describe('OrderRepository Feature Test', function () {
             )
         );
 
-        $repository = new OrderRepository(new ModelOrder(), new Product());
+        $repository = new OrderRepository(new ModelOrder(), new ModelProduct());
         $response = $repository->create($order);
-        
+
         assertDatabaseCount(ModelOrder::class, 1);
         assertDatabaseCount(ModelOrderProduct::class, 1);
         assertDatabaseCount(ModelOrderPayment::class, 1);
